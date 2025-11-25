@@ -14,14 +14,10 @@ const client = new OpenAI({
 });
 
 if (!process.env.OPENAI_API_KEY) {
-  console.warn(
-    "WARNING: OPENAI_API_KEY is not set. Requests to /ask will fail."
-  );
+  console.warn("WARNING: OPENAI_API_KEY is not set. Requests to /ask will fail.");
 }
 
-// --- API ---
-
-// основной endpoint для мини-приложения
+// --- API: основной endpoint /ask ---
 app.post("/ask", async (req, res) => {
   const question = (req.body?.question || "").toString().trim();
 
@@ -58,7 +54,6 @@ app.post("/ask", async (req, res) => {
   } catch (error) {
     console.error("OpenAI error:", error);
 
-    // немного подробностей в лог, но не в ответ пользователю
     res.status(500).json({
       answer:
         "При обращении к ИИ произошла ошибка. Попробуйте ещё раз или обратитесь к администратору."
@@ -66,13 +61,9 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// простой health-check
+// --- Health-check ---
 app.get("/", (req, res) => {
   res.send("GiDCity AI backend работает.");
 });
 
-// --- start server ---
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`AI backend listening on port ${PORT}`);
-});
+// ---
